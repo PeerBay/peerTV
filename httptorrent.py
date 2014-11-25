@@ -53,6 +53,8 @@ import logging.config
 import json
 import base64
 
+path=None
+
 class reference(object):
 	pass
 
@@ -78,7 +80,6 @@ def coerce_piece_par(s):
 		return (228, "\"--piece-par\" must be positive")
 	else:
 		return (0, b)
-
 class piece_server(object):
 	def __init__(self):
 		super(piece_server, self).__init__()
@@ -168,6 +169,7 @@ class alert_client(threading.Thread):
 
 class torrent_file_bt2p(object):
 	def write(self, dest, r):
+		global path
 		logger = logging.getLogger("root")
 		request_done = False
 		while (not(request_done)):
@@ -185,6 +187,7 @@ class torrent_file_bt2p(object):
 					available_length = len(data)-piece_slice.start
 				logger.debug("writing the data=(piece="+str(piece_slice.piece) \
 					+", interval=["+str(piece_slice.start)+", "+str(end)+"))")
+				path=dest	
 				dest.write(data[piece_slice.start:end])
 				logger.debug("the data have been written")
 				r.first += available_length
@@ -206,6 +209,25 @@ class torrent_read_bt2p(object):
 	def write_html_index(self, piece_par):
 		t = {}
 		error = []
+		size=0
+		for f in self.torrent_info.files():
+			if f.size > size:
+				size=f.size
+				path=urllib.pathname2url("/"+f.path)
+			print path,size
+		return """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>"""+escape_html(self.torrent_info.name())+"""</title>
+</head>
+<body>
+
+</body>
+<script>window.location = "http://peer.local:8080/stream/http%3A//0.0.0.0%3A8000"""+path+ """"</script>
+</html>
+"""		
+		
 		for f in self.torrent_info.files():
 			t0 = t
 			level = 0
@@ -236,8 +258,10 @@ class torrent_read_bt2p(object):
 				tag, z = y
 				# indent_s = level*"&mdash;"
 				indent_s = " style=\"padding-left:"+str(30*level)+"pt\""
+				
 				if "file"==tag:
 					f = z
+					
 					r.append("""
 <tr>
 	<td"""+indent_s+"""><a href="""+"\""+urllib.pathname2url("/"+f.path)+"\""+""">"""+escape_html(x)+"""</a></td>
@@ -251,6 +275,7 @@ class torrent_read_bt2p(object):
 					r.append(flat(z, level+1))
 				else:
 					pass
+			
 			return "".join(r)
 		file_tree_s = flat(t, 0)
 		error2s = lambda x: "<li>"+escape_html(x)+"</li>"
@@ -470,7 +495,9 @@ def error_exit(exit_code, message):
 	sys.exit(exit_code)
 
 class term_handler(object):
+	
 	def __init__(self):
+		print self
 		super(term_handler, self).__init__()
 		self.h = {}
 		self.set_all()
@@ -551,6 +578,131 @@ def main_default(options):
 		options["piece-par"] = 8 # configuration
 	if not ("save-path" in options):
 		error_exit(226, "\"--save-path\" is mandatory")
+
+
+
+def main_options(options, l, ih, th):
+	main_log(l)
+	
+	main_ti(options, ih)
+	main_torrent_descr(options, th)
+
+def main(argv=None):
+	th = term_handler()
+	if argv is None:
+		argv = sys.argv
+	try:
+		crude_options, args = getopt.getopt(argv[1:], ""
+			, ["resume=", "save-path=", "piece-par=", "domain-name=", "port="
+			, "log", "log-conf="
+			, "hash-file=", "info-hash-value-base16=", "info-hash-value-base32=", "info-hash-tracker="])
+	except getopt.error, error:
+		error_exit(221, "the option "+error.opt+" is incorrect because "+error.msg)
+	if []!=args:
+		error_exit(222, "only options are allowed, not arguments")
+	options = {}
+	log = False
+	log_conf = None
+	info_hash_count = 0
+	info_hash = None
+	options["info-hash-tracker"] = []
+	for o, a in crude_options:
+		if "--resume"==o:
+			options["resume"] = a
+		elif "--hash-file"==o:
+			options["hash-file"] = a
+		elif o.startswith("--info-hash-value-"):
+			info_hash_count += 1
+			if "--info-hash-value-base16"==o:
+				info_hash = base64.b16decode(a)
+			elif "--info-hash-value-base32"==o:
+				info_hash = base64.b32decode(a)
+		elif "--info-hash-tracker"==o:
+			options["info-hash-tracker"].append(a)
+		elif "--save-path"==o:
+			options["save-path"] = a
+		elif "--piece-par"==o:
+			tag, value = coerce_piece_par(a)
+			if 0==tag:
+				options["piece-par"] = value
+			else:
+				error_exit(tag, value)
+		elif "--log"==o:
+			log = True
+		elif "--log-conf"==o:
+			log_conf = a
+		elif "--domain-name"==o:
+			options["domain-name"] = a
+		elif "--port"==o:
+			options["port"] = a
+		else:
+			error_exit(223, "an unknown option is given")
+	main_options(options, (log, log_conf), (info_hash_count, info_hash), th)
+
+def main_daemon(argv=None):
+	th = term_handler()
+	if argv is None:
+		argv = sys.argv
+	access_mode = (7*8+5)*8+5
+	var_dir = fs.expanduser("~/.local/var")
+	var_run_dir = fs.join(var_dir, "run")
+	try:
+		os.makedirs(var_run_dir, access_mode)
+	except OSError:
+		pass
+	ex_pid_file_name = fs.join(var_run_dir, "bt2pd.pid") # configuration
+	def scavenge_pid():
+		os.unlink(ex_pid_file_name)
+	if fs.exists(ex_pid_file_name):
+		if fs.isfile(ex_pid_file_name):
+			ex_pid = int(io.open(ex_pid_file_name, "r").read())
+			success = False
+			i = 10
+			while (i>0 and not success):
+				i -= 1
+				try:
+					os.kill(ex_pid, signal.SIGTERM)
+				except OSError:
+					success = True
+				sleep(1)
+			if not success:
+				error_exit(231, "SIGTERM was sent to the existing process of this program, but it does not terminate")
+			else:
+				try:
+					scavenge_pid()
+				except OSError:
+					pass
+	if len(argv)==2:
+		io.open(ex_pid_file_name, "w").write(unicode(os.getpid())+"\n")
+		#~ th.set_handler("scavenge_pid", scavenge_pid)
+		c = None
+		try:
+			if "XDG_CONFIG_HOME" in os.environ and os.environ["XDG_CONFIG_HOME"]:
+				xdg_config_home = os.environ["XDG_CONFIG_HOME"]
+			else:
+				xdg_config_home = fs.join(os.environ["HOME"], ".config")
+			c = json.load(io.open(fs.join(xdg_config_home, "bt2pd.conf")))
+		except IOError:
+			pass
+		except ValueError:
+			pass
+		if c is None:
+			error_exit(232, "error while reading the configuration file")
+		if not ("save_path" in c):
+			error_exit(233, "no parameter \"save_path\" in the configuration file")
+		o = {"hash-file": argv[1], "save-path": c["save_path"].encode("utf8", "ignore")
+			, "resume": fs.join(var_dir, "bt2pd.resume") # configuration
+			}
+		if "piece_par" in c:
+			o["piece-par"] = c["piece_par"]
+		main_options(o, (False, None), (0, None), th)
+	elif len(argv)==1:
+		sys.exit(os.EX_OK)
+	else:
+		error_exit(os.EX_USAGE, "more than 1 argument")
+
+#~ if __name__ == "__main__":
+	#~ main()
 
 def serve_torrent(magnet=None,hash_file=None):
 	options = {}
@@ -687,126 +839,3 @@ def serve_torrent(magnet=None,hash_file=None):
 	except KeyboardInterrupt:
 		print "key interrupt"
 		#~ th.do()
-
-def main_options(options, l, ih, th):
-	main_log(l)
-	
-	main_ti(options, ih)
-	main_torrent_descr(options, th)
-
-def main(argv=None):
-	th = term_handler()
-	if argv is None:
-		argv = sys.argv
-	try:
-		crude_options, args = getopt.getopt(argv[1:], ""
-			, ["resume=", "save-path=", "piece-par=", "domain-name=", "port="
-			, "log", "log-conf="
-			, "hash-file=", "info-hash-value-base16=", "info-hash-value-base32=", "info-hash-tracker="])
-	except getopt.error, error:
-		error_exit(221, "the option "+error.opt+" is incorrect because "+error.msg)
-	if []!=args:
-		error_exit(222, "only options are allowed, not arguments")
-	options = {}
-	log = False
-	log_conf = None
-	info_hash_count = 0
-	info_hash = None
-	options["info-hash-tracker"] = []
-	for o, a in crude_options:
-		if "--resume"==o:
-			options["resume"] = a
-		elif "--hash-file"==o:
-			options["hash-file"] = a
-		elif o.startswith("--info-hash-value-"):
-			info_hash_count += 1
-			if "--info-hash-value-base16"==o:
-				info_hash = base64.b16decode(a)
-			elif "--info-hash-value-base32"==o:
-				info_hash = base64.b32decode(a)
-		elif "--info-hash-tracker"==o:
-			options["info-hash-tracker"].append(a)
-		elif "--save-path"==o:
-			options["save-path"] = a
-		elif "--piece-par"==o:
-			tag, value = coerce_piece_par(a)
-			if 0==tag:
-				options["piece-par"] = value
-			else:
-				error_exit(tag, value)
-		elif "--log"==o:
-			log = True
-		elif "--log-conf"==o:
-			log_conf = a
-		elif "--domain-name"==o:
-			options["domain-name"] = a
-		elif "--port"==o:
-			options["port"] = a
-		else:
-			error_exit(223, "an unknown option is given")
-	main_options(options, (log, log_conf), (info_hash_count, info_hash), th)
-
-def main_daemon(argv=None):
-	th = term_handler()
-	if argv is None:
-		argv = sys.argv
-	access_mode = (7*8+5)*8+5
-	var_dir = fs.expanduser("~/.local/var")
-	var_run_dir = fs.join(var_dir, "run")
-	try:
-		os.makedirs(var_run_dir, access_mode)
-	except OSError:
-		pass
-	ex_pid_file_name = fs.join(var_run_dir, "bt2pd.pid") # configuration
-	def scavenge_pid():
-		os.unlink(ex_pid_file_name)
-	if fs.exists(ex_pid_file_name):
-		if fs.isfile(ex_pid_file_name):
-			ex_pid = int(io.open(ex_pid_file_name, "r").read())
-			success = False
-			i = 10
-			while (i>0 and not success):
-				i -= 1
-				try:
-					os.kill(ex_pid, signal.SIGTERM)
-				except OSError:
-					success = True
-				sleep(1)
-			if not success:
-				error_exit(231, "SIGTERM was sent to the existing process of this program, but it does not terminate")
-			else:
-				try:
-					scavenge_pid()
-				except OSError:
-					pass
-	if len(argv)==2:
-		io.open(ex_pid_file_name, "w").write(unicode(os.getpid())+"\n")
-		#~ th.set_handler("scavenge_pid", scavenge_pid)
-		c = None
-		try:
-			if "XDG_CONFIG_HOME" in os.environ and os.environ["XDG_CONFIG_HOME"]:
-				xdg_config_home = os.environ["XDG_CONFIG_HOME"]
-			else:
-				xdg_config_home = fs.join(os.environ["HOME"], ".config")
-			c = json.load(io.open(fs.join(xdg_config_home, "bt2pd.conf")))
-		except IOError:
-			pass
-		except ValueError:
-			pass
-		if c is None:
-			error_exit(232, "error while reading the configuration file")
-		if not ("save_path" in c):
-			error_exit(233, "no parameter \"save_path\" in the configuration file")
-		o = {"hash-file": argv[1], "save-path": c["save_path"].encode("utf8", "ignore")
-			, "resume": fs.join(var_dir, "bt2pd.resume") # configuration
-			}
-		if "piece_par" in c:
-			o["piece-par"] = c["piece_par"]
-		main_options(o, (False, None), (0, None), th)
-	elif len(argv)==1:
-		sys.exit(os.EX_OK)
-	else:
-		error_exit(os.EX_USAGE, "more than 1 argument")
-
-#~ if __name__ == "__main__":
-	#~ main()

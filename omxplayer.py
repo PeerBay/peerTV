@@ -3,11 +3,21 @@ import subprocess
 import os
 import re
 import time
+import guessit
+import web
+import youtube_dl
+import threading
 #~ import omxcon
 #~ a=omxcon.OMXPlayer("video.mp4")
 
 OMXPLAYER_LIB_PATH='/opt/vc/lib:/usr/lib/omxplayer'
 LOCAL_LIB_PATH='/usr/local/lib'
+FORMATS = ['.264','.avi','.bin','.divx','.f4v','.h264','.m4e','.m4v','.m4a','.mkv','.mov','.mp4','.mp4v','.mpe','.mpeg','.mpeg4','.mpg','.mpg2','.mpv','.mpv2','.mqv','.mvp','.ogm','.ogv','.qt','.qtm','.rm','.rts','.scm','.scn','.smk','.swf','.vob','.wmv','.xvid','.x264','.mp3','.flac','.ogg','.wav', '.flv', '.mkv']
+FBI_FORMATS=['JPEG','JPG','jpg','jpeg','png','tiff','ppm','gif','xwd','bmp']
+def find_media_info():			
+	size=0
+	
+
 
 
 class omxplayer():
@@ -22,7 +32,14 @@ class omxplayer():
 		if mrl.startswith('/') and not os.access(mrl, os.R_OK):
 			raise IOError('No permission to read %s' % mrl)
 		if not mrl.startswith('http'):
-			video_info = detect_video_information(mrl)
+			video_info=False
+			timer=0
+			while video_info==False:
+				video_info = detect_video_information(mrl)
+				time.sleep(1)
+				timer+=1
+				if timer==300:
+					break
 			if video_info == False:
 				raise IOError('Media "%s" not found' % mrl)
 				
@@ -233,4 +250,123 @@ def remove_pid_file():
 	except:
 		pass
 
-			
+def get_duration(mediafile):
+	info = pexpect.spawn( _FILE_INFO_CMD % (mediafile) )
+	duration = '00:00:00'
+	data=info.readlines()
+	for l in data:
+		if re.findall('Duration: ([^"]*), start',l)!=[]:
+			duration =re.findall('Duration: ([^"]*), start',l)
+			duration=duration[0].split(".")[0]
+			l = duration.split(':')
+			duration=int(l[0]) * 3600 + int(l[1]) * 60 + int(l[2])
+	return duration
+	
+	
+def get_subtitles(language):
+	try:
+		session = subdown.server.LogIn('', '', 'en', 'opensubtitles-download 3.2')
+	except:
+		print "cant connect to opensubs"				
+	
+def image(link):
+	th=threading.Thread(target=startx)
+	th.start()
+	subprocess.Popen('killall fbi',shell=True)
+	subprocess.Popen(["fbi","-T","1","-t","5","-a","-e","-cachemem","50",link])
+def gallery(links=[]):
+	th=threading.Thread(target=startx)
+	th.start()
+	subprocess.Popen('killall fbi',shell=True)
+	if links==[]:
+		print "gallery"
+		subprocess.Popen(["fbi","-T","1","-t","5","-a","-e","-cachemem","50","gallery"])
+def pdf(url):
+	subprocess.Popen(["wget",url,"-P","/home/pdf"])
+	file_dest='/home/pdf/'+url.split("?")[0].split("/").pop()
+	
+	th=threading.Thread(target=startx)
+	th.start()
+	print file_dest
+	subprocess.Popen(['xpdf',file_dest])
+	print file_dest
+	pass
+	global pdfprog
+	pdfprog = 'xpdf'
+	#~ if not pdfprog:
+		#~ if os.path.exists('/usr/bin/evince'):
+			#~ pdfprog = 'evince'
+		#~ elif os.path.exists('/usr/bin/xpdf'):
+			#~ pdfprog = 'xpdf'
+		#~ else:
+			#~ pdfprog = 'mupdf'
+	go = False
+	# option to open pdf as local file copies instead of downloading them first
+	if pdfpathreplacements:
+		for k,v in pdfpathreplacements.iteritems():
+			if url.startswith(k):
+				nurl = url.replace(k,v)
+				if os.path.exists(urllib.unquote(nurl.replace('file://','').replace('%20',' ').split('#')[0])):
+					url = nurl
+				break
+	if url.startswith('file://'):
+		url = url.replace('file://','').replace('%20',' ')
+		url = urllib.unquote(url)
+		urll = url.split('#page=')
+		f = urll[0]
+		if os.path.exists(f):
+			if len(urll) > 1:
+				page = urll[1].split('&')[0]
+				if pdfprog in ['evince','evince-gtk']:
+					os.execvp(pdfprog,[pdfprog]+pdfoptions+['-i',page,f])
+				else:
+					os.execvp(pdfprog,[pdfprog]+pdfoptions+[f,page])
+			else:
+				os.execvp(pdfprog,[pdfprog]+pdfoptions+[f])
+	else:
+		lower = url.lower()
+		if lower.endswith('.pdf') or '.pdf#page' in lower:
+			urll = url.split('#page=')
+			f = dldir+os.sep+urllib.unquote(urll[0].split('/')[-1].replace('%20',' '))
+			if os.path.exists(f):
+				go = True
+			else:
+				try:
+					fn,h = urllib.urlretrieve(urll[0],f)
+					go = True
+				except:
+					pass
+		if go:
+			if len(urll) > 1:
+				page = urll[1].split('&')[0]
+				if pdfprog in ['evince','evince-gtk']:
+					os.execvp(pdfprog,[pdfprog]+pdfoptions+['-i',page,f])
+				else:
+					os.execvp(pdfprog,[pdfprog]+pdfoptions+[f,page])
+			else:
+				os.execvp(pdfprog,[pdfprog]+pdfoptions+[f])
+				
+				
+def ytdl(link):
+	link=web.webapi.urllib.unquote(link)
+	ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s'})
+	# Add all the available extractors
+	ydl.add_default_info_extractors()
+	
+	result = ydl.extract_info(link
+	    , download=False # We just want to extract the info
+	    )
+	
+	if 'entries' in result:
+	    # Can be a playlist or a list of videos
+	    video = result['entries'][0]
+	else:
+	    # Just a video
+	    video = result
+	
+	print(video)
+	video_url = video['url']
+	playingvideo=omxplayer(video_url)				
+
+def startx():
+	subprocess.call('xinit',shell=True)
