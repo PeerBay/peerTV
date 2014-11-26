@@ -277,10 +277,12 @@ def image(link):
 def gallery(links=[]):
 	th=threading.Thread(target=startx)
 	th.start()
+	time.sleep(5)
 	subprocess.Popen('killall fbi',shell=True)
 	if links==[]:
+		
 		print "gallery"
-		subprocess.Popen(["fbi","-T","1","-t","5","-a","-e","-cachemem","50","gallery"])
+		subprocess.Popen(["sh","startGallery.sh"])
 def pdf(url):
 	subprocess.Popen(["wget",url,"-P","/home/pdf"])
 	file_dest='/home/pdf/'+url.split("?")[0].split("/").pop()
