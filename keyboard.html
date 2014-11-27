@@ -7,11 +7,16 @@
 <a id="playOnTv"> Play on TV </a>
 <a id="playHere"> Play here </a>
 
-<textarea id="TVkeyboard"  style="width:300px;height:300px;background:red"></textarea>
-<div id="copier"></div>
+<div id="TVkeyboard" contenteditable=true style="width:800px;height:600px;position:absolute;opacity:1;font-size:20">
+
+<img id="screen" src="http://peer.local:8888/static/screenshot.jpg" style="">
+</div>
 </body>
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script> function ping(){
+<script src="jQuery.ajaxQueue.js"></script>
+<script> 
+	
+	function ping(){
        var online
        $.ajax({
           url: 'http://peer.local:8000',
@@ -31,12 +36,15 @@
     }
   }
 }
+
+
+
 l= {"9":"Tab","27":"Escape","8":"BackSpace","13":"Return","32":"space","33":"exclam","34":"quotedbl","35":"numbersign","36":"dollar","37":"percent","38":"ampersand","39":"apostrophe","40":"parenleft","41":"parenright","42":"asterisk","43":"plus","44":"comma","45":"minus","46":"period","47":"slash","48":"0","49":"1","50":"2","51":"3","52":"4","53":"5","54":"6","55":"7","56":"8","57":"9","58":"colon","59":"semicolon","60":"less","61":"equal","62":"greater","63":"question","64":"at","65":"A","66":"B","67":"C","68":"D","69":"E","70":"F","71":"G","72":"H","73":"I","74":"J","75":"K","76":"L","77":"M","78":"N","79":"O","80":"P","81":"Q","82":"R","83":"S","84":"T","85":"U","86":"V","87":"W","88":"X","89":"Y","90":"Z","91":"bracketleft","92":"backslash","93":"bracketright","94":"asciicircum","95":"underscore","96":"grave","97":"a","98":"b","99":"c","100":"d","101":"e","102":"f","103":"g","104":"h","105":"i","106":"j","107":"k","108":"l","109":"m","110":"n","111":"o","112":"p","113":"q","114":"r","115":"s","116":"t","117":"u","118":"v","119":"w","120":"x","121":"y","122":"z","123":"braceleft","124":"bar","125":"braceright","126":"asciitilde","160":"nobreakspace","161":"exclamdown","162":"cent","163":"sterling","164":"currency","165":"yen","166":"brokenbar","167":"section","168":"diaeresis","169":"copyright","170":"ordfeminine","171":"guillemotleft","172":"notsign","173":"hyphen","174":"registered","175":"macron","176":"degree","177":"plusminus","178":"twosuperior","179":"threesuperior","180":"acute","181":"mu","182":"paragraph","183":"periodcentered","184":"cedilla","185":"onesuperior","186":"masculine","187":"guillemotright","188":"onequarter","189":"onehalf","190":"threequarters","191":"questiondown","192":"Agrave","193":"Aacute","194":"Acircumflex","195":"Atilde","196":"Adiaeresis","197":"Aring","198":"AE","199":"Ccedilla","200":"Egrave","201":"Eacute","202":"Ecircumflex","203":"Ediaeresis","204":"Igrave","205":"Iacute","206":"Icircumflex","207":"Idiaeresis","208":"ETH","209":"Ntilde","210":"Ograve","211":"Oacute","212":"Ocircumflex","213":"Otilde","214":"Odiaeresis","215":"multiply","216":"Ooblique","217":"Ugrave","218":"Uacute","219":"Ucircumflex","220":"Udiaeresis","221":"Yacute","222":"THORN","223":"ssharp","224":"agrave","225":"aacute","226":"acircumflex","227":"atilde","228":"adiaeresis","229":"aring","230":"ae","231":"ccedilla","232":"egrave","233":"eacute","234":"ecircumflex","235":"ediaeresis","236":"igrave","237":"iacute","238":"icircumflex","239":"idiaeresis","240":"eth","241":"ntilde","242":"ograve","243":"oacute","244":"ocircumflex","245":"otilde","246":"odiaeresis","247":"division","248":"oslash","249":"ugrave","250":"uacute","251":"ucircumflex","252":"udiaeresis","253":"yacute","254":"thorn","255":"ydiaeresis","417":"Aogonek","418":"breve","419":"Lstroke","421":"Lcaron","422":"Sacute","425":"Scaron","426":"Scedilla","427":"Tcaron","428":"Zacute","430":"Zcaron","431":"Zabovedot","433":"aogonek","434":"ogonek","435":"lstroke","437":"lcaron","438":"sacute","439":"caron","441":"scaron","442":"scedilla","443":"tcaron","444":"zacute","445":"doubleacute","446":"zcaron","447":"zabovedot","448":"Racute","451":"Abreve","453":"Lacute","454":"Cacute","456":"Ccaron","458":"Eogonek","460":"Ecaron","463":"Dcaron","464":"Dstroke","465":"Nacute","466":"Ncaron","469":"Odoubleacute","472":"Rcaron","473":"Uring","475":"Udoubleacute","478":"Tcedilla","480":"racute","483":"abreve","485":"lacute","486":"cacute","488":"ccaron","490":"eogonek","492":"ecaron","495":"dcaron","496":"dstroke","497":"nacute","498":"ncaron","501":"odoubleacute","504":"rcaron","505":"uring","507":"udoubleacute","510":"tcedilla","511":"abovedot","673":"Hstroke","678":"Hcircumflex","681":"Iabovedot","683":"Gbreve","684":"Jcircumflex","689":"hstroke","694":"hcircumflex","697":"idotless","699":"gbreve","700":"jcircumflex","709":"Cabovedot","710":"Ccircumflex","725":"Gabovedot","728":"Gcircumflex","733":"Ubreve","734":"Scircumflex","741":"cabovedot","742":"ccircumflex","757":"gabovedot","760":"gcircumflex","765":"ubreve","766":"scircumflex","930":"kra","931":"Rcedilla","933":"Itilde","934":"Lcedilla","938":"Emacron","939":"Gcedilla","940":"Tslash","947":"rcedilla","949":"itilde","950":"lcedilla","954":"emacron","955":"gcedilla","956":"tslash","957":"ENG","959":"eng","960":"Amacron","967":"Iogonek","972":"Eabovedot","975":"Imacron","977":"Ncedilla","978":"Omacron","979":"Kcedilla","985":"Uogonek","989":"Utilde","990":"Umacron","992":"amacron","999":"iogonek","1004":"eabovedot","1007":"imacron","1009":"ncedilla","1010":"omacron","1011":"kcedilla","1017":"uogonek","1021":"utilde","1022":"umacron","1150":"overline","1185":"kana_fullstop","1186":"kana_openingbracket","1187":"kana_closingbracket","1188":"kana_comma","1189":"kana_conjunctive","1190":"kana_WO","1191":"kana_a","1192":"kana_i","1193":"kana_u","1194":"kana_e","1195":"kana_o","1196":"kana_ya","1197":"kana_yu","1198":"kana_yo","1199":"kana_tsu","1200":"prolongedsound","1201":"kana_A","1202":"kana_I","1203":"kana_U","1204":"kana_E","1205":"kana_O","1206":"kana_KA","1207":"kana_KI","1208":"kana_KU","1209":"kana_KE","1210":"kana_KO","1211":"kana_SA","1212":"kana_SHI","1213":"kana_SU","1214":"kana_SE","1215":"kana_SO","1216":"kana_TA","1217":"kana_CHI","1218":"kana_TSU","1219":"kana_TE","1220":"kana_TO","1221":"kana_NA","1222":"kana_NI","1223":"kana_NU","1224":"kana_NE","1225":"kana_NO","1226":"kana_HA","1227":"kana_HI","1228":"kana_FU","1229":"kana_HE","1230":"kana_HO","1231":"kana_MA","1232":"kana_MI","1233":"kana_MU","1234":"kana_ME","1235":"kana_MO","1236":"kana_YA","1237":"kana_YU","1238":"kana_YO","1239":"kana_RA","1240":"kana_RI","1241":"kana_RU","1242":"kana_RE","1243":"kana_RO","1244":"kana_WA","1245":"kana_N","1246":"voicedsound","1247":"semivoicedsound","1424":"Farsi_0","1425":"Farsi_1","1426":"Farsi_2","1427":"Farsi_3","1428":"Farsi_4","1429":"Farsi_5","1430":"Farsi_6","1431":"Farsi_7","1432":"Farsi_8","1433":"Farsi_9","1445":"Arabic_percent","1446":"Arabic_superscript_alef","1447":"Arabic_tteh","1448":"Arabic_peh","1449":"Arabic_tcheh","1450":"Arabic_ddal","1451":"Arabic_rreh","1452":"Arabic_comma","1454":"Arabic_fullstop","1456":"Arabic_0","1457":"Arabic_1","1458":"Arabic_2","1459":"Arabic_3","1460":"Arabic_4","1461":"Arabic_5","1462":"Arabic_6","1463":"Arabic_7","1464":"Arabic_8","1465":"Arabic_9","1467":"Arabic_semicolon","1471":"Arabic_question_mark","1473":"Arabic_hamza","1474":"Arabic_maddaonalef","1475":"Arabic_hamzaonalef","1476":"Arabic_hamzaonwaw","1477":"Arabic_hamzaunderalef","1478":"Arabic_hamzaonyeh","1479":"Arabic_alef","1480":"Arabic_beh","1481":"Arabic_tehmarbuta","1482":"Arabic_teh","1483":"Arabic_theh","1484":"Arabic_jeem","1485":"Arabic_hah","1486":"Arabic_khah","1487":"Arabic_dal","1488":"Arabic_thal","1489":"Arabic_ra","1490":"Arabic_zain","1491":"Arabic_seen","1492":"Arabic_sheen","1493":"Arabic_sad","1494":"Arabic_dad","1495":"Arabic_tah","1496":"Arabic_zah","1497":"Arabic_ain","1498":"Arabic_ghain","1504":"Arabic_tatweel","1505":"Arabic_feh","1506":"Arabic_qaf","1507":"Arabic_kaf","1508":"Arabic_lam","1509":"Arabic_meem","1510":"Arabic_noon","1511":"Arabic_ha","1512":"Arabic_waw","1513":"Arabic_alefmaksura","1514":"Arabic_yeh","1515":"Arabic_fathatan","1516":"Arabic_dammatan","1517":"Arabic_kasratan","1518":"Arabic_fatha","1519":"Arabic_damma","1520":"Arabic_kasra","1521":"Arabic_shadda","1522":"Arabic_sukun","1523":"Arabic_madda_above","1524":"Arabic_hamza_above","1525":"Arabic_hamza_below","1526":"Arabic_jeh","1527":"Arabic_veh","1528":"Arabic_keheh","1529":"Arabic_gaf","1530":"Arabic_noon_ghunna","1531":"Arabic_heh_doachashmee","1532":"Farsi_yeh","1533":"Arabic_yeh_baree","1534":"Arabic_heh_goal","1664":"Cyrillic_GHE_bar","1665":"Cyrillic_ZHE_descender","1666":"Cyrillic_KA_descender","1667":"Cyrillic_KA_vertstroke","1668":"Cyrillic_EN_descender","1669":"Cyrillic_U_straight","1670":"Cyrillic_U_straight_bar","1671":"Cyrillic_HA_descender","1672":"Cyrillic_CHE_descender","1673":"Cyrillic_CHE_vertstroke","1674":"Cyrillic_SHHA","1676":"Cyrillic_SCHWA","1677":"Cyrillic_I_macron","1678":"Cyrillic_O_bar","1679":"Cyrillic_U_macron","1680":"Cyrillic_ghe_bar","1681":"Cyrillic_zhe_descender","1682":"Cyrillic_ka_descender","1683":"Cyrillic_ka_vertstroke","1684":"Cyrillic_en_descender","1685":"Cyrillic_u_straight","1686":"Cyrillic_u_straight_bar","1687":"Cyrillic_ha_descender","1688":"Cyrillic_che_descender","1689":"Cyrillic_che_vertstroke","1690":"Cyrillic_shha","1692":"Cyrillic_schwa","1693":"Cyrillic_i_macron","1694":"Cyrillic_o_bar","1695":"Cyrillic_u_macron","1697":"Serbian_dje","1698":"Macedonia_gje","1699":"Cyrillic_io","1700":"Ukrainian_ie","1701":"Macedonia_dse","1702":"Ukrainian_i","1703":"Ukrainian_yi","1704":"Cyrillic_je","1705":"Cyrillic_lje","1706":"Cyrillic_nje","1707":"Serbian_tshe","1708":"Macedonia_kje","1709":"Ukrainian_ghe_with_upturn","1710":"Byelorussian_shortu","1711":"Cyrillic_dzhe","1712":"numerosign","1713":"Serbian_DJE","1714":"Macedonia_GJE","1715":"Cyrillic_IO","1716":"Ukrainian_IE","1717":"Macedonia_DSE","1718":"Ukrainian_I","1719":"Ukrainian_YI","1720":"Cyrillic_JE","1721":"Cyrillic_LJE","1722":"Cyrillic_NJE","1723":"Serbian_TSHE","1724":"Macedonia_KJE","1725":"Ukrainian_GHE_WITH_UPTURN","1726":"Byelorussian_SHORTU","1727":"Cyrillic_DZHE","1728":"Cyrillic_yu","1729":"Cyrillic_a","1730":"Cyrillic_be","1731":"Cyrillic_tse","1732":"Cyrillic_de","1733":"Cyrillic_ie","1734":"Cyrillic_ef","1735":"Cyrillic_ghe","1736":"Cyrillic_ha","1737":"Cyrillic_i","1738":"Cyrillic_shorti","1739":"Cyrillic_ka","1740":"Cyrillic_el","1741":"Cyrillic_em","1742":"Cyrillic_en","1743":"Cyrillic_o","1744":"Cyrillic_pe","1745":"Cyrillic_ya","1746":"Cyrillic_er","1747":"Cyrillic_es","1748":"Cyrillic_te","1749":"Cyrillic_u","1750":"Cyrillic_zhe","1751":"Cyrillic_ve","1752":"Cyrillic_softsign","1753":"Cyrillic_yeru","1754":"Cyrillic_ze","1755":"Cyrillic_sha","1756":"Cyrillic_e","1757":"Cyrillic_shcha","1758":"Cyrillic_che","1759":"Cyrillic_hardsign","1760":"Cyrillic_YU","1761":"Cyrillic_A","1762":"Cyrillic_BE","1763":"Cyrillic_TSE","1764":"Cyrillic_DE","1765":"Cyrillic_IE","1766":"Cyrillic_EF","1767":"Cyrillic_GHE","1768":"Cyrillic_HA","1769":"Cyrillic_I","1770":"Cyrillic_SHORTI","1771":"Cyrillic_KA","1772":"Cyrillic_EL","1773":"Cyrillic_EM","1774":"Cyrillic_EN","1775":"Cyrillic_O","1776":"Cyrillic_PE","1777":"Cyrillic_YA","1778":"Cyrillic_ER","1779":"Cyrillic_ES","1780":"Cyrillic_TE","1781":"Cyrillic_U","1782":"Cyrillic_ZHE","1783":"Cyrillic_VE","1784":"Cyrillic_SOFTSIGN","1785":"Cyrillic_YERU","1786":"Cyrillic_ZE","1787":"Cyrillic_SHA","1788":"Cyrillic_E","1789":"Cyrillic_SHCHA","1790":"Cyrillic_CHE","1791":"Cyrillic_HARDSIGN","1953":"Greek_ALPHAaccent","1954":"Greek_EPSILONaccent","1955":"Greek_ETAaccent","1956":"Greek_IOTAaccent","1957":"Greek_IOTAdiaeresis","1959":"Greek_OMICRONaccent","1960":"Greek_UPSILONaccent","1961":"Greek_UPSILONdieresis","1963":"Greek_OMEGAaccent","1966":"Greek_accentdieresis","1967":"Greek_horizbar","1969":"Greek_alphaaccent","1970":"Greek_epsilonaccent","1971":"Greek_etaaccent","1972":"Greek_iotaaccent","1973":"Greek_iotadieresis","1974":"Greek_iotaaccentdieresis","1975":"Greek_omicronaccent","1976":"Greek_upsilonaccent","1977":"Greek_upsilondieresis","1978":"Greek_upsilonaccentdieresis","1979":"Greek_omegaaccent","1985":"Greek_ALPHA","1986":"Greek_BETA","1987":"Greek_GAMMA","1988":"Greek_DELTA","1989":"Greek_EPSILON","1990":"Greek_ZETA","1991":"Greek_ETA","1992":"Greek_THETA","1993":"Greek_IOTA","1994":"Greek_KAPPA","1995":"Greek_LAMBDA","1996":"Greek_MU","1997":"Greek_NU","1998":"Greek_XI","1999":"Greek_OMICRON","2000":"Greek_PI","2001":"Greek_RHO","2002":"Greek_SIGMA","2004":"Greek_TAU","2005":"Greek_UPSILON","2006":"Greek_PHI","2007":"Greek_CHI","2008":"Greek_PSI","2009":"Greek_OMEGA","2017":"Greek_alpha","2018":"Greek_beta","2019":"Greek_gamma","2020":"Greek_delta","2021":"Greek_epsilon","2022":"Greek_zeta","2023":"Greek_eta","2024":"Greek_theta","2025":"Greek_iota","2026":"Greek_kappa","2027":"Greek_lambda","2028":"Greek_mu","2029":"Greek_nu","2030":"Greek_xi","2031":"Greek_omicron","2032":"Greek_pi","2033":"Greek_rho","2034":"Greek_sigma","2035":"Greek_finalsmallsigma","2036":"Greek_tau","2037":"Greek_upsilon","2038":"Greek_phi","2039":"Greek_chi","2040":"Greek_psi","2041":"Greek_omega","2209":"leftradical","2210":"topleftradical","2211":"horizconnector","2212":"topintegral","2213":"botintegral","2214":"vertconnector","2215":"topleftsqbracket","2216":"botleftsqbracket","2217":"toprightsqbracket","2218":"botrightsqbracket","2219":"topleftparens","2220":"botleftparens","2221":"toprightparens","2222":"botrightparens","2223":"leftmiddlecurlybrace","2224":"rightmiddlecurlybrace","2225":"topleftsummation","2226":"botleftsummation","2227":"topvertsummationconnector","2228":"botvertsummationconnector","2229":"toprightsummation","2230":"botrightsummation","2231":"rightmiddlesummation","2236":"lessthanequal","2237":"notequal","2238":"greaterthanequal","2239":"integral","2240":"therefore","2241":"variation","2242":"infinity","2245":"nabla","2248":"approximate","2249":"similarequal","2253":"ifonlyif","2254":"implies","2255":"identical","2262":"radical","2266":"includedin","2267":"includes","2268":"intersection","2269":"union","2270":"logicaland","2271":"logicalor","2287":"partialderivative","2294":"function","37":"leftarrow","40":"uparrow","2301":"rightarrow","2302":"downarrow","2527":"blank","2528":"soliddiamond","2529":"checkerboard","2530":"ht","2531":"ff","2532":"cr","2533":"lf","2536":"nl","2537":"vt","2538":"lowrightcorner","2539":"uprightcorner","2540":"upleftcorner","2541":"lowleftcorner","2542":"crossinglines","2543":"horizlinescan1","2544":"horizlinescan3","2545":"horizlinescan5","2546":"horizlinescan7","2547":"horizlinescan9","2548":"leftt","2549":"rightt","2550":"bott","2551":"topt","2552":"vertbar","2721":"emspace","2722":"enspace","2723":"em3space","2724":"em4space","2725":"digitspace","2726":"punctspace","2727":"thinspace","2728":"hairspace","2729":"emdash","2730":"endash","2732":"signifblank","2734":"ellipsis","2735":"doubbaselinedot","2736":"onethird","2737":"twothirds","2738":"onefifth","2739":"twofifths","2740":"threefifths","2741":"fourfifths","2742":"onesixth","2743":"fivesixths","2744":"careof","2747":"figdash","2748":"leftanglebracket","2749":"decimalpoint","2750":"rightanglebracket","2751":"marker","2755":"oneeighth","2756":"threeeighths","2757":"fiveeighths","2758":"seveneighths","2761":"trademark","2762":"signaturemark","2763":"trademarkincircle","2764":"leftopentriangle","2765":"rightopentriangle","2766":"emopencircle","2767":"emopenrectangle","2768":"leftsinglequotemark","2769":"rightsinglequotemark","2770":"leftdoublequotemark","2771":"rightdoublequotemark","2772":"prescription","2774":"minutes","2775":"seconds","2777":"latincross","2778":"hexagram","2779":"filledrectbullet","2780":"filledlefttribullet","2781":"filledrighttribullet","2782":"emfilledcircle","2783":"emfilledrect","2784":"enopencircbullet","2785":"enopensquarebullet","2786":"openrectbullet","2787":"opentribulletup","2788":"opentribulletdown","2789":"openstar","2790":"enfilledcircbullet","2791":"enfilledsqbullet","2792":"filledtribulletup","2793":"filledtribulletdown","2794":"leftpointer","2795":"rightpointer","2796":"club","2797":"diamond","2798":"heart","2800":"maltesecross","2801":"dagger","2802":"doubledagger","2803":"checkmark","2804":"ballotcross","2805":"musicalsharp","2806":"musicalflat","2807":"malesymbol","2808":"femalesymbol","2809":"telephone","2810":"telephonerecorder","2811":"phonographcopyright","2812":"caret","2813":"singlelowquotemark","2814":"doublelowquotemark","2815":"cursor","2979":"leftcaret","2982":"rightcaret","2984":"downcaret","2985":"upcaret","3008":"overbar","3010":"downtack","3011":"upshoe","3012":"downstile","3014":"underbar","3018":"jot","3020":"quad","3022":"uptack","3023":"circle","3027":"upstile","3030":"downshoe","3032":"rightshoe","3034":"leftshoe","3036":"lefttack","3068":"righttack","3295":"hebrew_doublelowline","3296":"hebrew_aleph","3297":"hebrew_bet","3298":"hebrew_gimel","3299":"hebrew_dalet","3300":"hebrew_he","3301":"hebrew_waw","3302":"hebrew_zain","3303":"hebrew_chet","3304":"hebrew_tet","3305":"hebrew_yod","3306":"hebrew_finalkaph","3307":"hebrew_kaph","3308":"hebrew_lamed","3309":"hebrew_finalmem","3310":"hebrew_mem","3311":"hebrew_finalnun","3312":"hebrew_nun","3313":"hebrew_samech","3314":"hebrew_ayin","3315":"hebrew_finalpe","3316":"hebrew_pe","3317":"hebrew_finalzade","3318":"hebrew_zade","3319":"hebrew_kuf","3320":"hebrew_resh","3321":"hebrew_shin","3322":"hebrew_taf","3489":"Thai_kokai","3490":"Thai_khokhai","3491":"Thai_khokhuat","3492":"Thai_khokhwai","3493":"Thai_khokhon","3494":"Thai_khorakhang","3495":"Thai_ngongu","3496":"Thai_chochan","3497":"Thai_choching","3498":"Thai_chochang","3499":"Thai_soso","3500":"Thai_chochoe","3501":"Thai_yoying","3502":"Thai_dochada","3503":"Thai_topatak","3504":"Thai_thothan","3505":"Thai_thonangmontho","3506":"Thai_thophuthao","3507":"Thai_nonen","3508":"Thai_dodek","3509":"Thai_totao","3510":"Thai_thothung","3511":"Thai_thothahan","3512":"Thai_thothong","3513":"Thai_nonu","3514":"Thai_bobaimai","3515":"Thai_popla","3516":"Thai_phophung","3517":"Thai_fofa","3518":"Thai_phophan","3519":"Thai_fofan","3520":"Thai_phosamphao","3521":"Thai_moma","3522":"Thai_yoyak","3523":"Thai_rorua","3524":"Thai_ru","3525":"Thai_loling","3526":"Thai_lu","3527":"Thai_wowaen","3528":"Thai_sosala","3529":"Thai_sorusi","3530":"Thai_sosua","3531":"Thai_hohip","3532":"Thai_lochula","3533":"Thai_oang","3534":"Thai_honokhuk","3535":"Thai_paiyannoi","3536":"Thai_saraa","3537":"Thai_maihanakat","3538":"Thai_saraaa","3539":"Thai_saraam","3540":"Thai_sarai","3541":"Thai_saraii","3542":"Thai_saraue","3543":"Thai_sarauee","3544":"Thai_sarau","3545":"Thai_sarauu","3546":"Thai_phinthu","3550":"Thai_maihanakat_maitho","3551":"Thai_baht","3552":"Thai_sarae","3553":"Thai_saraae","3554":"Thai_sarao","3555":"Thai_saraaimaimuan","3556":"Thai_saraaimaimalai","3557":"Thai_lakkhangyao","3558":"Thai_maiyamok","3559":"Thai_maitaikhu","3560":"Thai_maiek","3561":"Thai_maitho","3562":"Thai_maitri","3563":"Thai_maichattawa","3564":"Thai_thanthakhat","3565":"Thai_nikhahit","3568":"Thai_leksun","3569":"Thai_leknung","3570":"Thai_leksong","3571":"Thai_leksam","3572":"Thai_leksi","3573":"Thai_lekha","3574":"Thai_lekhok","3575":"Thai_lekchet","3576":"Thai_lekpaet","3577":"Thai_lekkao","3745":"Hangul_Kiyeog","3746":"Hangul_SsangKiyeog","3747":"Hangul_KiyeogSios","3748":"Hangul_Nieun","3749":"Hangul_NieunJieuj","3750":"Hangul_NieunHieuh","3751":"Hangul_Dikeud","3752":"Hangul_SsangDikeud","3753":"Hangul_Rieul","3754":"Hangul_RieulKiyeog","3755":"Hangul_RieulMieum","3756":"Hangul_RieulPieub","3757":"Hangul_RieulSios","3758":"Hangul_RieulTieut","3759":"Hangul_RieulPhieuf","3760":"Hangul_RieulHieuh","3761":"Hangul_Mieum","3762":"Hangul_Pieub","3763":"Hangul_SsangPieub","3764":"Hangul_PieubSios","3765":"Hangul_Sios","3766":"Hangul_SsangSios","3767":"Hangul_Ieung","3768":"Hangul_Jieuj","3769":"Hangul_SsangJieuj","3770":"Hangul_Cieuc","3771":"Hangul_Khieuq","3772":"Hangul_Tieut","3773":"Hangul_Phieuf","3774":"Hangul_Hieuh","3775":"Hangul_A","3776":"Hangul_AE","3777":"Hangul_YA","3778":"Hangul_YAE","3779":"Hangul_EO","3780":"Hangul_E","3781":"Hangul_YEO","3782":"Hangul_YE","3783":"Hangul_O","3784":"Hangul_WA","3785":"Hangul_WAE","3786":"Hangul_OE","3787":"Hangul_YO","3788":"Hangul_U","3789":"Hangul_WEO","3790":"Hangul_WE","3791":"Hangul_WI","3792":"Hangul_YU","3793":"Hangul_EU","3794":"Hangul_YI","3795":"Hangul_I","3796":"Hangul_J_Kiyeog","3797":"Hangul_J_SsangKiyeog","3798":"Hangul_J_KiyeogSios","3799":"Hangul_J_Nieun","3800":"Hangul_J_NieunJieuj","3801":"Hangul_J_NieunHieuh","3802":"Hangul_J_Dikeud","3803":"Hangul_J_Rieul","3804":"Hangul_J_RieulKiyeog","3805":"Hangul_J_RieulMieum","3806":"Hangul_J_RieulPieub","3807":"Hangul_J_RieulSios","3808":"Hangul_J_RieulTieut","3809":"Hangul_J_RieulPhieuf","3810":"Hangul_J_RieulHieuh","3811":"Hangul_J_Mieum","3812":"Hangul_J_Pieub","3813":"Hangul_J_PieubSios","3814":"Hangul_J_Sios","3815":"Hangul_J_SsangSios","3816":"Hangul_J_Ieung","3817":"Hangul_J_Jieuj","3818":"Hangul_J_Cieuc","3819":"Hangul_J_Khieuq","3820":"Hangul_J_Tieut","3821":"Hangul_J_Phieuf","3822":"Hangul_J_Hieuh","3823":"Hangul_RieulYeorinHieuh","3824":"Hangul_SunkyeongeumMieum","3825":"Hangul_SunkyeongeumPieub","3826":"Hangul_PanSios","3827":"Hangul_KkogjiDalrinIeung","3828":"Hangul_SunkyeongeumPhieuf","3829":"Hangul_YeorinHieuh","3830":"Hangul_AraeA","3831":"Hangul_AraeAE","3832":"Hangul_J_PanSios","3833":"Hangul_J_KkogjiDalrinIeung","3834":"Hangul_J_YeorinHieuh","3839":"Korean_Won","4769":"Babovedot","4770":"babovedot","4774":"Dabovedot","4776":"Wgrave","4778":"Wacute","4779":"dabovedot","4780":"Ygrave","4784":"Fabovedot","4785":"fabovedot","4788":"Mabovedot","4789":"mabovedot","4791":"Pabovedot","4792":"wgrave","4793":"pabovedot","4794":"wacute","4795":"Sabovedot","4796":"ygrave","4797":"Wdiaeresis","4798":"wdiaeresis","4799":"sabovedot","4816":"Wcircumflex","4823":"Tabovedot","4830":"Ycircumflex","4848":"wcircumflex","4855":"tabovedot","4862":"ycircumflex","5052":"OE","5053":"oe","5054":"Ydiaeresis","5281":"Armenian_eternity","5282":"Armenian_ligature_ew","5283":"Armenian_verjaket","5284":"Armenian_parenright","5285":"Armenian_parenleft","5286":"Armenian_guillemotright","5287":"Armenian_guillemotleft","5288":"Armenian_em_dash","5289":"Armenian_mijaket","5290":"Armenian_but","5291":"Armenian_comma","5292":"Armenian_en_dash","5293":"Armenian_yentamna","5294":"Armenian_ellipsis","5295":"Armenian_amanak","5296":"Armenian_shesht","5297":"Armenian_paruyk","5298":"Armenian_AYB","5299":"Armenian_ayb","5300":"Armenian_BEN","5301":"Armenian_ben","5302":"Armenian_GIM","5303":"Armenian_gim","5304":"Armenian_DA","5305":"Armenian_da","5306":"Armenian_YECH","5307":"Armenian_yech","5308":"Armenian_ZA","5309":"Armenian_za","5310":"Armenian_E","5311":"Armenian_e","5312":"Armenian_AT","5313":"Armenian_at","5314":"Armenian_TO","5315":"Armenian_to","5316":"Armenian_ZHE","5317":"Armenian_zhe","5318":"Armenian_INI","5319":"Armenian_ini","5320":"Armenian_LYUN","5321":"Armenian_lyun","5322":"Armenian_KHE","5323":"Armenian_khe","5324":"Armenian_TSA","5325":"Armenian_tsa","5326":"Armenian_KEN","5327":"Armenian_ken","5328":"Armenian_HO","5329":"Armenian_ho","5330":"Armenian_DZA","5331":"Armenian_dza","5332":"Armenian_GHAT","5333":"Armenian_ghat","5334":"Armenian_TCHE","5335":"Armenian_tche","5336":"Armenian_MEN","5337":"Armenian_men","5338":"Armenian_HI","5339":"Armenian_hi","5340":"Armenian_NU","5341":"Armenian_nu","5342":"Armenian_SHA","5343":"Armenian_sha","5344":"Armenian_VO","5345":"Armenian_vo","5346":"Armenian_CHA","5347":"Armenian_cha","5348":"Armenian_PE","5349":"Armenian_pe","5350":"Armenian_JE","5351":"Armenian_je","5352":"Armenian_RA","5353":"Armenian_ra","5354":"Armenian_SE","5355":"Armenian_se","5356":"Armenian_VEV","5357":"Armenian_vev","5358":"Armenian_TYUN","5359":"Armenian_tyun","5360":"Armenian_RE","5361":"Armenian_re","5362":"Armenian_TSO","5363":"Armenian_tso","5364":"Armenian_VYUN","5365":"Armenian_vyun","5366":"Armenian_PYUR","5367":"Armenian_pyur","5368":"Armenian_KE","5369":"Armenian_ke","5370":"Armenian_O","5371":"Armenian_o","5372":"Armenian_FE","5373":"Armenian_fe","5374":"Armenian_apostrophe","5375":"Armenian_section_sign","5584":"Georgian_an","5585":"Georgian_ban","5586":"Georgian_gan","5587":"Georgian_don","5588":"Georgian_en","5589":"Georgian_vin","5590":"Georgian_zen","5591":"Georgian_tan","5592":"Georgian_in","5593":"Georgian_kan","5594":"Georgian_las","5595":"Georgian_man","5596":"Georgian_nar","5597":"Georgian_on","5598":"Georgian_par","5599":"Georgian_zhar","5600":"Georgian_rae","5601":"Georgian_san","5602":"Georgian_tar","5603":"Georgian_un","5604":"Georgian_phar","5605":"Georgian_khar","5606":"Georgian_ghan","5607":"Georgian_qar","5608":"Georgian_shin","5609":"Georgian_chin","5610":"Georgian_can","5611":"Georgian_jil","5612":"Georgian_cil","5613":"Georgian_char","5614":"Georgian_xan","5615":"Georgian_jhan","5616":"Georgian_hae","5617":"Georgian_he","5618":"Georgian_hie","5619":"Georgian_we","5620":"Georgian_har","5621":"Georgian_hoe","5622":"Georgian_fi","5794":"Ccedillaabovedot","5795":"Xabovedot","5797":"Qabovedot","5798":"Ibreve","5799":"IE","5800":"UO","5801":"Zstroke","5802":"Gcaron","5807":"Obarred","5810":"ccedillaabovedot","5811":"xabovedot","5812":"Ocaron","5813":"qabovedot","5814":"ibreve","5815":"ie","5816":"uo","5817":"zstroke","5818":"gcaron","5821":"ocaron","5823":"obarred","5830":"SCHWA","5841":"Lbelowdot","5842":"Lstrokebelowdot","5843":"Gtilde","5857":"lbelowdot","5858":"lstrokebelowdot","5859":"gtilde","5878":"schwa","7839":"combining_tilde","7840":"Abelowdot","7841":"abelowdot","7842":"Ahook","7843":"ahook","7844":"Acircumflexacute","7845":"acircumflexacute","7846":"Acircumflexgrave","7847":"acircumflexgrave","7848":"Acircumflexhook","7849":"acircumflexhook","7850":"Acircumflextilde","7851":"acircumflextilde","7852":"Acircumflexbelowdot","7853":"acircumflexbelowdot","7854":"Abreveacute","7855":"abreveacute","7856":"Abrevegrave","7857":"abrevegrave","7858":"Abrevehook","7859":"abrevehook","7860":"Abrevetilde","7861":"abrevetilde","7862":"Abrevebelowdot","7863":"abrevebelowdot","7864":"Ebelowdot","7865":"ebelowdot","7866":"Ehook","7867":"ehook","7868":"Etilde","7869":"etilde","7870":"Ecircumflexacute","7871":"ecircumflexacute","7872":"Ecircumflexgrave","7873":"ecircumflexgrave","7874":"Ecircumflexhook","7875":"ecircumflexhook","7876":"Ecircumflextilde","7877":"ecircumflextilde","7878":"Ecircumflexbelowdot","7879":"ecircumflexbelowdot","7880":"Ihook","7881":"ihook","7882":"Ibelowdot","7883":"ibelowdot","7884":"Obelowdot","7885":"obelowdot","7886":"Ohook","7887":"ohook","7888":"Ocircumflexacute","7889":"ocircumflexacute","7890":"Ocircumflexgrave","7891":"ocircumflexgrave","7892":"Ocircumflexhook","7893":"ocircumflexhook","7894":"Ocircumflextilde","7895":"ocircumflextilde","7896":"Ocircumflexbelowdot","7897":"ocircumflexbelowdot","7898":"Ohornacute","7899":"ohornacute","7900":"Ohorngrave","7901":"ohorngrave","7902":"Ohornhook","7903":"ohornhook","7904":"Ohorntilde","7905":"ohorntilde","7906":"Ohornbelowdot","7907":"ohornbelowdot","7908":"Ubelowdot","7909":"ubelowdot","7910":"Uhook","7911":"uhook","7912":"Uhornacute","7913":"uhornacute","7914":"Uhorngrave","7915":"uhorngrave","7916":"Uhornhook","7917":"uhornhook","7918":"Uhorntilde","7919":"uhorntilde","7920":"Uhornbelowdot","7921":"uhornbelowdot","7922":"combining_grave","7923":"combining_acute","7924":"Ybelowdot","7925":"ybelowdot","7926":"Yhook","7927":"yhook","7928":"Ytilde","7929":"ytilde","7930":"Ohorn","7931":"ohorn","7932":"Uhorn","7933":"uhorn","7934":"combining_hook","7935":"combining_belowdot","8352":"EcuSign","8353":"ColonSign","8354":"CruzeiroSign","8355":"FFrancSign","8356":"LiraSign","8357":"MillSign","8358":"NairaSign","8359":"PesetaSign","8360":"RupeeSign","8361":"WonSign","8362":"NewSheqelSign","8363":"DongSign","8364":"EuroSign","64769":"3270_Duplicate","64770":"3270_FieldMark","64771":"3270_Right2","64772":"3270_Left2","64773":"3270_BackTab","64774":"3270_EraseEOF","64775":"3270_EraseInput","64776":"3270_Reset","64777":"3270_Quit","64778":"3270_PA1","64779":"3270_PA2","64780":"3270_PA3","64781":"3270_Test","64782":"3270_Attn","64783":"3270_CursorBlink","64784":"3270_AltCursor","64785":"3270_KeyClick","64786":"3270_Jump","64787":"3270_Ident","64788":"3270_Rule","64789":"3270_Copy","64790":"3270_Play","64791":"3270_Setup","64792":"3270_Record","64793":"3270_ChangeScreen","64794":"3270_DeleteWord","64795":"3270_ExSelect","64796":"3270_CursorSelect","64797":"3270_PrintScreen","64798":"3270_Enter","65025":"ISO_Lock","65026":"ISO_Level2_Latch","65027":"ISO_Level3_Shift","65028":"ISO_Level3_Latch","65029":"ISO_Level3_Lock","65030":"ISO_Group_Latch","65031":"ISO_Group_Lock","65032":"ISO_Next_Group","65033":"ISO_Next_Group_Lock","65034":"ISO_Prev_Group","65035":"ISO_Prev_Group_Lock","65036":"ISO_First_Group","65037":"ISO_First_Group_Lock","65038":"ISO_Last_Group","65039":"ISO_Last_Group_Lock","65056":"ISO_Left_Tab","65057":"ISO_Move_Line_Up","65058":"ISO_Move_Line_Down","65059":"ISO_Partial_Line_Up","65060":"ISO_Partial_Line_Down","65061":"ISO_Partial_Space_Left","65062":"ISO_Partial_Space_Right","65063":"ISO_Set_Margin_Left","65064":"ISO_Set_Margin_Right","65065":"ISO_Release_Margin_Left","65066":"ISO_Release_Margin_Right","65067":"ISO_Release_Both_Margins","65068":"ISO_Fast_Cursor_Left","65069":"ISO_Fast_Cursor_Right","65070":"ISO_Fast_Cursor_Up","65071":"ISO_Fast_Cursor_Down","65072":"ISO_Continuous_Underline","65073":"ISO_Discontinuous_Underline","65074":"ISO_Emphasize","65075":"ISO_Center_Object","65076":"ISO_Enter","65104":"dead_grave","65105":"dead_acute","65106":"dead_circumflex","65107":"dead_tilde","65108":"dead_macron","65109":"dead_breve","65110":"dead_abovedot","65111":"dead_diaeresis","65112":"dead_abovering","65113":"dead_doubleacute","65114":"dead_caron","65115":"dead_cedilla","65116":"dead_ogonek","65117":"dead_iota","65118":"dead_voiced_sound","65119":"dead_semivoiced_sound","65120":"dead_belowdot","65121":"dead_hook","65122":"dead_horn","65136":"AccessX_Enable","65137":"AccessX_Feedback_Enable","65138":"RepeatKeys_Enable","65139":"SlowKeys_Enable","65140":"BounceKeys_Enable","65141":"StickyKeys_Enable","65142":"MouseKeys_Enable","65143":"MouseKeys_Accel_Enable","65144":"Overlay1_Enable","65145":"Overlay2_Enable","65146":"AudibleBell_Enable","65232":"First_Virtual_Screen","65233":"Prev_Virtual_Screen","65234":"Next_Virtual_Screen","65236":"Last_Virtual_Screen","65237":"Terminate_Server","65248":"Pointer_Left","65249":"Pointer_Right","65250":"Pointer_Up","65251":"Pointer_Down","65252":"Pointer_UpLeft","65253":"Pointer_UpRight","65254":"Pointer_DownLeft","65255":"Pointer_DownRight","65256":"Pointer_Button_Dflt","65257":"Pointer_Button1","65258":"Pointer_Button2","65259":"Pointer_Button3","65260":"Pointer_Button4","65261":"Pointer_Button5","65262":"Pointer_DblClick_Dflt","65263":"Pointer_DblClick1","65264":"Pointer_DblClick2","65265":"Pointer_DblClick3","65266":"Pointer_DblClick4","65267":"Pointer_DblClick5","65268":"Pointer_Drag_Dflt","65269":"Pointer_Drag1","65270":"Pointer_Drag2","65271":"Pointer_Drag3","65272":"Pointer_Drag4","65273":"Pointer_EnableKeys","65274":"Pointer_Accelerate","65275":"Pointer_DfltBtnNext","65276":"Pointer_DfltBtnPrev","65277":"Pointer_Drag5","65288":"BackSpace","65289":"Tab","65290":"Linefeed","65291":"Clear","65293":"Return","65299":"Pause","65300":"Scroll_Lock","65301":"Sys_Req","65307":"Escape","65312":"Multi_key","65313":"Kanji","65314":"Muhenkan","65315":"Henkan_Mode","65316":"Romaji","65317":"Hiragana","65318":"Katakana","65319":"Hiragana_Katakana","65320":"Zenkaku","65321":"Hankaku","65322":"Zenkaku_Hankaku","65323":"Touroku","65324":"Massyo","65325":"Kana_Lock","65326":"Kana_Shift","65327":"Eisu_Shift","65328":"Eisu_toggle","65329":"Hangul","65330":"Hangul_Start","65331":"Hangul_End","65332":"Hangul_Hanja","65333":"Hangul_Jamo","65334":"Hangul_Romaja","65335":"Codeinput","65336":"Hangul_Jeonja","65337":"Hangul_Banja","65338":"Hangul_PreHanja","65339":"Hangul_PostHanja","65340":"SingleCandidate","65341":"MultipleCandidate","65342":"PreviousCandidate","65343":"Hangul_Special","65360":"Home","65361":"Left","65362":"Up","65363":"Right","65364":"Down","65365":"Prior","65366":"Next","65367":"End","65368":"Begin","65376":"Select","65377":"Print","65378":"Execute","65379":"Insert","65381":"Undo","65382":"Redo","65383":"Menu","65384":"Find","65385":"Cancel","65386":"Help","65387":"Break","65406":"Mode_switch","65407":"Num_Lock","65408":"KP_Space","65417":"KP_Tab","65421":"KP_Enter","65425":"KP_F1","65426":"KP_F2","65427":"KP_F3","65428":"KP_F4","65429":"KP_Home","65430":"KP_Left","65431":"KP_Up","65432":"KP_Right","65433":"KP_Down","65434":"KP_Prior","65435":"KP_Next","65436":"KP_End","65437":"KP_Begin","65438":"KP_Insert","65439":"KP_Delete","65450":"KP_Multiply","65451":"KP_Add","65452":"KP_Separator","65453":"KP_Subtract","65454":"KP_Decimal","65455":"KP_Divide","65456":"KP_0","65457":"KP_1","65458":"KP_2","65459":"KP_3","65460":"KP_4","65461":"KP_5","65462":"KP_6","65463":"KP_7","65464":"KP_8","65465":"KP_9","65469":"KP_Equal","65470":"F1","65471":"F2","65472":"F3","65473":"F4","65474":"F5","65475":"F6","65476":"F7","65477":"F8","65478":"F9","65479":"F10","65480":"F11","65481":"F12","65482":"F13","65483":"F14","65484":"F15","65485":"F16","65486":"F17","65487":"F18","65488":"F19","65489":"F20","65490":"F21","65491":"F22","65492":"F23","65493":"F24","65494":"F25","65495":"F26","65496":"F27","65497":"F28","65498":"F29","65499":"F30","65500":"F31","65501":"F32","65502":"F33","65503":"F34","65504":"F35","65505":"Shift_L","65506":"Shift_R","65507":"Control_L","65508":"Control_R","65509":"Caps_Lock","65510":"Shift_Lock","65511":"Meta_L","65512":"Meta_R","65513":"Alt_L","65514":"Alt_R","65515":"Super_L","65516":"Super_R","65517":"Hyper_L","65518":"Hyper_R","65535":"Delete","16777215":"VoidSymbol"}
 
  keycomb={"20":"Tab","27":"Escape","8":"BackSpace","13":"Return","32":"space","37":"Left","38":"Up","39":"Right","40":"Down"
-	 ,"16":"Shift_L","17":"Control_L","46":"Delete"}
+	 ,"46":"Delete","33":"Page_Up","34":"Page_Down"}
+ctrlkeys={"18":"Alt_L", "16":"Shift_L","17":"Control_L"}
  charcomb={
-    ' ': "space",
     '!': "exclam",
     '#': "numbersign",
     '%': "percent",
@@ -70,62 +78,108 @@ l= {"9":"Tab","27":"Escape","8":"BackSpace","13":"Return","32":"space","33":"exc
     '}': "braceright",
     '~': "asciitilde"
     }
-    var isCtrl=false
-  $(document).on("keydown", function (e) {
-                        if (e.which == 17) {
-                            isCtrl = true; // Ctrl
-                            return;
-                        }
 
-                        /* Ctrl and "c" */
-                        if (isCtrl && e.which == 67) {
-                            //some code 
-                        }
-                    }).keyup(function (e) {
-                        if (e.which == 17) {
-                            isCtrl = false; // no Ctrl
-                        }
-                    });  
-$(document).keyup(function(evt) {
-		console.log({"timestamp":evt.timeStamp,
+	var typing = false
+	multiple="";
+	$("#TVkeyboard").keyup(function (evt) {
+		console.log({"keycode":multiple+evt.which})
+		
+		console.log(evt)	
+		keycode=String(evt.which)
+		//~ character=$("#TVkeyboard").text()
+		//~ $("#TVkeyboard").text("")
+		character=String.fromCharCode(evt.keyCode);
+		if(keycode in ctrlkeys){
+			multiple=ctrlkeys[keycode]+"+"
+			
+		}else if(multiple!=""){
+			$.ajaxQueue({
+	          url: 'http://peer.local:8888/key/'+multiple+character
+	        });
+	        multiple="";
+		}else if(keycode in keycomb){
+			$.ajaxQueue({
+	          url: 'http://peer.local:8888/key/'+multiple+keycomb[keycode]
+	        });
+	        $("#TVkeyboard").focus()
+          }else if ( character in charcomb){
+			$.ajaxQueue({
+				url: 'http://peer.local:8888/key/'+multiple+charcomb[character]
+	            });
+          }else if(character!=""){
+			$.ajaxQueue({
+	          url: 'http://peer.local:8888/char/'+multiple+character
+	        });
+          }
+          if(!typing){
+			  typing=true;
+			  setTimeout(function() {
+				    typing=false;
+				}, 5000);
+			}
+          
+		});
+$("#TVkeyboard").bind('mousewheel', function(event) {
+	x=event.offsetX
+	y=event.offsetY
+    if (event.originalEvent.wheelDelta >= 0) {
+        console.log('Scroll up');
+        console.log(event)
+        $.ajax({
+		  url: 'http://peer.local:8888/mouse/'+String(x)+"-"+String(y)+"-4"
+		});
+    }
+    else {
+        console.log(event);console.log('Scroll down');
+        $.ajax({
+		  url: 'http://peer.local:8888/mouse/'+String(x)+"-"+String(y)+"-5"
+		});
+    }
+});
+$('#screen').mousedown(function(event) {
+	
+    which=event.which
+    console.log(which)
 
-                "keycode":evt.which})
-                keycode=String(evt.which)
-				character=String.fromCharCode(evt.which)
-				character=$("#TVkeyboard").val()
-				$("#TVkeyboard").val("")
-				multiple=""
-				if(isCtrl){
-					multiple="alt+"
-					console.log(isCtrl)
-				}
-				if(keycode in keycomb){
-					evt.preventDefault()
-	                $.ajax({
-			          url: 'http://peer.local:8888/char/'+multiple+keycomb[keycode]
-			        });
-			        $("#TVkeyboard").focus()
-		          }else if ( character in charcomb){
-					$.ajax({
-						url: 'http://peer.local:8888/char/'+multiple+charcomb[character]
-			            });
-		          }else if(character!=""){
-	                $.ajax({
-			          url: 'http://peer.local:8888/char/'+multiple+character
-			        });
-		          } 
+	x=event.offsetX
+	y=event.offsetY
+	$.ajax({
+	  url: 'http://peer.local:8888/mouse/'+String(x)+"-"+String(y)+"-"+String(which)
 	});
-//~ $("#TVkeyboard").hover(function(){
-	//~ 
-	//~ 
-	//~ })
-
-$("#playOnTv").click(function(){
-		while(offline){
-			sleep(2000)
-			console.log("still sleeping")
+	
+});		
+		
+var needimage=true	
+function updateImage()
+{	console.log("image");
+	if(newImage.complete) {
+		if (!typing){
+			console.log(typing)
+			$.ajax({
+			          url: 'http://peer.local:8888/screen/',
+			        })
+			newImage = new Image();
+		    newImage.src = "http://peer.local:8888/static/screenshot.jpg?time=" + new Date();
+			document.getElementById("screen").src = newImage.src;
+		    
 		}
-		window.location = "http://peer.local:8000"
-})
+	}
+	setTimeout(function() {
+		    updateImage();
+		}, 1400);
+	    
+  
+}
+
+var newImage = new Image();
+newImage.src = "http://peer.local:8888/static/screenshot.png";
+updateImage()
+//~ $("#playOnTv").click(function(){
+		//~ while(offline){
+			//~ sleep(2000)
+			//~ console.log("still sleeping")
+		//~ }
+		//~ window.location = "http://peer.local:8000"
+//~ })
 </script>
 </html>

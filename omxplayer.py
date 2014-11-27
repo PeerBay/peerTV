@@ -286,9 +286,7 @@ def gallery(links=[]):
 def pdf(url):
 	subprocess.Popen(["wget",url,"-P","/home/pdf"])
 	file_dest='/home/pdf/'+url.split("?")[0].split("/").pop()
-	
-	th=threading.Thread(target=startx)
-	th.start()
+
 	print file_dest
 	subprocess.Popen(['xpdf',file_dest])
 	print file_dest
